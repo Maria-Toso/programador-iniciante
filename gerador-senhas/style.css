@@ -4,7 +4,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #0d1117; /* Fundo escuro como o GitHub */
+    background-color: #0d1117;
     color: #c9d1d9;
     margin: 0;
 }
@@ -25,7 +25,6 @@ h1 {
     font-size: 1.5em;
 }
 
-/* Saída da Senha e Botão Copiar */
 .output-box {
     display: flex;
     margin-bottom: 20px;
@@ -56,7 +55,6 @@ h1 {
     background-color: #2ea043;
 }
 
-/* Configurações */
 .settings {
     display: flex;
     flex-direction: column;
