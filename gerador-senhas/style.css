@@ -1,0 +1,97 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #0d1117; /* Fundo escuro como o GitHub */
+    color: #c9d1d9;
+    margin: 0;
+}
+
+.container {
+    background: #161b22;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 400px;
+}
+
+h1 {
+    text-align: center;
+    color: #58a6ff;
+    margin-bottom: 25px;
+    font-size: 1.5em;
+}
+
+/* Saída da Senha e Botão Copiar */
+.output-box {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+#passwordDisplay {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 1.1em;
+    border: 1px solid #30363d;
+    background: #0d1117;
+    color: #fff;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+#copyButton {
+    background-color: #238636;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+    transition: background-color 0.3s;
+}
+
+#copyButton:hover {
+    background-color: #2ea043;
+}
+
+/* Configurações */
+.settings {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+input[type="number"] {
+    width: 50px;
+    padding: 5px;
+    text-align: center;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    color: #fff;
+    border-radius: 4px;
+}
+
+#generateButton {
+    background-color: #58a6ff;
+    color: black;
+    border: none;
+    padding: 12px;
+    font-size: 1.1em;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+#generateButton:hover {
+    background-color: #79c0ff;
+}
