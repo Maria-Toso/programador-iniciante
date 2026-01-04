@@ -3,13 +3,13 @@ import time
 import requests
 from kafka import KafkaProducer
 
-# Configurações básicas (Pega tua key no newsapi.org, não seja preguiçoso)
+# Configurações básicas (Pega tua key no newsapi.org)
 API_KEY = 'SUA_KEY_AQUI'
 TOPIC_NAME = 'raw_tweets'
 KAFKA_SERVER = 'localhost:9092'
 
 # Inicializa o Producer do Kafka
-# O value_serializer garante que a gente envie JSON e não lixo binário
+# O value_serializer garante que a gente envie JSON
 producer = KafkaProducer(
     bootstrap_servers=[KAFKA_SERVER],
     value_serializer=lambda x: json.dumps(x).encode('utf-8')
