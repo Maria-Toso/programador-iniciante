@@ -8,14 +8,7 @@ class JogoForcaGUI:
         self.root.title("Jogo da Forca - Versão Visual")
         self.root.geometry("600x500")
         
-        # Lógica do Jogo
-        self.palavra_secreta = self.carregar_palavra()
-        self.letras_acertadas = ["_" for _ in self.palavra_secreta]
-        self.erros = 0
-        self.tentativas = []
-
-        # Interface
-        self.setup_ui()
+        self.reiniciar_jogo()
 
     def carregar_palavra(self):
         try:
@@ -25,24 +18,35 @@ class JogoForcaGUI:
         except:
             return "PYTHON"
 
+    def reiniciar_jogo(self):
+        # Limpar interface se já existir
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        # Lógica do Jogo
+        self.palavra_secreta = self.carregar_palavra()
+        self.letras_acertadas = ["_" for _ in self.palavra_secreta]
+        self.erros = 0
+        self.tentativas = []
+
+        # Interface
+        self.setup_ui()
+
     def setup_ui(self):
-        # Título e Palavra
         self.label_palavra = tk.Label(self.root, text=" ".join(self.letras_acertadas), font=("Helvetica", 30))
         self.label_palavra.pack(pady=20)
 
-        # Área de desenho (Forca)
         self.canvas = tk.Canvas(self.root, width=200, height=200, bg="white")
         self.canvas.pack()
         self.desenhar_estrutura_forca()
 
-        # Entrada de letra
         self.frame_entrada = tk.Frame(self.root)
         self.frame_entrada.pack(pady=20)
         
         tk.Label(self.frame_entrada, text="Digite uma letra:", font=("Helvetica", 12)).pack(side=tk.LEFT)
         self.entrada = tk.Entry(self.frame_entrada, width=5, font=("Helvetica", 12))
         self.entrada.pack(side=tk.LEFT, padx=10)
-        self.entrada.bind('<Return>', lambda e: self.verificar_letra()) # Atalho tecla Enter
+        self.entrada.bind('<Return>', lambda e: self.verificar_letra())
 
         self.botao = tk.Button(self.frame_entrada, text="Tentar", command=self.verificar_letra, bg="#4CAF50", fg="white")
         self.botao.pack(side=tk.LEFT)
@@ -51,18 +55,24 @@ class JogoForcaGUI:
         self.label_status.pack()
 
     def desenhar_estrutura_forca(self):
-        self.canvas.create_line(20, 180, 180, 180, width=3) # Base
-        self.canvas.create_line(50, 180, 50, 20, width=3)   # Poste vertical
-        self.canvas.create_line(50, 20, 120, 20, width=3)   # Poste horizontal
-        self.canvas.create_line(120, 20, 120, 40, width=3)  # Corda
+        self.canvas.create_line(20, 180, 180, 180, width=3) 
+        self.canvas.create_line(50, 180, 50, 20, width=3)   
+        self.canvas.create_line(50, 20, 120, 20, width=3)   
+        self.canvas.create_line(120, 20, 120, 40, width=3)  
 
     def desenhar_boneco(self):
-        if self.erros == 1: self.canvas.create_oval(100, 40, 140, 80, width=3) # Cabeça
-        elif self.erros == 2: self.canvas.create_line(120, 80, 120, 130, width=3) # Corpo
-        elif self.erros == 3: self.canvas.create_line(120, 90, 90, 110, width=3)  # Braço E
-        elif self.erros == 4: self.canvas.create_line(120, 90, 150, 110, width=3) # Braço D
-        elif self.erros == 5: self.canvas.create_line(120, 130, 90, 160, width=3) # Perna E
-        elif self.erros == 6: self.canvas.create_line(120, 130, 150, 160, width=3) # Perna D
+        if self.erros == 1: 
+            self.canvas.create_oval(100, 40, 140, 80, width=3) 
+        elif self.erros == 2: 
+            self.canvas.create_line(120, 80, 120, 130, width=3) 
+        elif self.erros == 3: 
+            self.canvas.create_line(120, 90, 90, 110, width=3)  
+        elif self.erros == 4: 
+            self.canvas.create_line(120, 90, 150, 110, width=3) 
+        elif self.erros == 5: 
+            self.canvas.create_line(120, 130, 90, 160, width=3) 
+        elif self.erros == 6: 
+            self.canvas.create_line(120, 130, 150, 160, width=3) 
 
     def verificar_letra(self):
         letra = self.entrada.get().upper()
@@ -93,10 +103,10 @@ class JogoForcaGUI:
     def checar_fim_de_jogo(self):
         if "_" not in self.letras_acertadas:
             messagebox.showinfo("Fim de Jogo", f"Parabéns! Ganhaste.\nA palavra era: {self.palavra_secreta}")
-            self.root.destroy()
+            self.reiniciar_jogo()
         elif self.erros >= 6:
             messagebox.showerror("Fim de Jogo", f"Perbeste!\nA palavra era: {self.palavra_secreta}")
-            self.root.destroy()
+            self.reiniciar_jogo()
 
 if __name__ == "__main__":
     root = tk.Tk()
