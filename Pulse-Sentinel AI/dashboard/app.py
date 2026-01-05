@@ -1,42 +1,60 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import requests
+from pymongo import MongoClient
 import time
 
 st.set_page_config(page_title="Pulse-Sentinel Dashboard", layout="wide")
-
 st.title("⚡ Pulse-Sentinel: Real-Time Web Sentiment")
 
-# Placeholder para o dashboard atualizar em tempo real
+# Conexão com o MongoDB Atlas via Secrets
+# Certifique-se de salvar MONGO_URI nos Secrets do Streamlit!
+@st.cache_resource
+def init_connection():
+    return MongoClient(st.secrets["MONGO_URI"])
+
+client = init_connection()
+db = client['PulseSentinel'] # Nome do banco que você criou no Atlas
+collection = db['sentiments']
+
 placeholder = st.empty()
 
 while True:
     try:
-        response = requests.get("http://localhost:8000/stats").json()
-        df = pd.DataFrame(response['recent_data'])
+        # Busca os últimos 100 documentos do MongoDB
+        data = list(collection.find().sort("_id", -1).limit(100))
+        
+        if not data:
+            st.warning("Banco de dados vazio. Ligue o Ingestor e o Processador!")
+            time.sleep(5)
+            continue
+
+        df = pd.DataFrame(data)
+        
+        # Processamento dos dados para o Dashboard
+        total = len(df)
+        counts = df['label'].value_counts().to_dict()
+        pos = counts.get('LABEL_2', 0) # Ajuste o label conforme sua IA
+        neg = counts.get('LABEL_0', 0)
 
         with placeholder.container():
-            # Métricas principais
             kpi1, kpi2, kpi3 = st.columns(3)
-            kpi1.metric("Total Analisado", response['total_analyzed'])
-            kpi2.metric("Positivos 👍", response['sentiment_breakdown']['positive'])
-            kpi3.metric("Negativos 👎", response['sentiment_breakdown']['negative'])
+            kpi1.metric("Total Analisado (Sessão)", total)
+            kpi2.metric("Positivos 👍", pos)
+            kpi3.metric("Negativos 👎", neg)
 
-            # Gráfico de Rosca (Donut Chart)
             fig = px.pie(
-                values=list(response['sentiment_breakdown'].values()), 
-                names=list(response['sentiment_breakdown'].keys()),
+                values=[pos, neg, counts.get('LABEL_1', 0)], 
+                names=['Positivo', 'Negativo', 'Neutro'],
                 hole=0.4,
-                title="Distribuição de Sentimento"
+                title="Distribuição de Sentimento Real-Time"
             )
             st.plotly_chart(fig, use_container_width=True)
 
-            # Tabela de dados brutos
-            st.write("### Últimos Insights Processados")
+            st.write("### Últimos Insights do MongoDB Atlas")
             st.dataframe(df[['content', 'label', 'score']].head(10))
 
-        time.sleep(2) # Refresh a cada 2 segundos
+        time.sleep(5) # Aumentei para 5s para não fritar o free tier do Atlas
     except Exception as e:
-        st.error(f"Esperando API ou Kafka... {e}")
-        time.sleep(5)
+        st.error(f"Erro ao conectar no MongoDB Atlas: {e}")
+        time.sleep(10)
