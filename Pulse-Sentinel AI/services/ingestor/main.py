@@ -4,7 +4,7 @@ import requests
 from kafka import KafkaProducer
 
 # Configurações básicas (Pega tua key no newsapi.org)
-API_KEY = 'SUA_KEY_AQUI'
+API_KEY = '7cfde709006c4399a5157bbb30cffce0'
 TOPIC_NAME = 'raw_tweets'
 KAFKA_SERVER = 'localhost:9092'
 
