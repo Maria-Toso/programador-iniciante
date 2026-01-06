@@ -3,4 +3,3 @@ pandas
 plotly
 pymongo
 dnspython
-plotly.express
