@@ -7,3 +7,4 @@ kafka-python
 torch
 transformers
 dnspython
+plotly.express
