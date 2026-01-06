@@ -4,6 +4,4 @@ plotly
 requests
 pymongo
 kafka-python
-transformers
-torch
 dnspython
