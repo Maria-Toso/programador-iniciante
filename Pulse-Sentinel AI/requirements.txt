@@ -1,10 +1,6 @@
 streamlit
 pandas
 plotly
-requests
 pymongo
-kafka-python
-torch
-transformers
 dnspython
 plotly.express
